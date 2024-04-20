@@ -1,0 +1,23 @@
+name: Create release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  create_release:
+    permissions:
+      # This is needed to create a release...
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create new release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RELEASE_ARGS='--generate-notes --draft'
+          gh release create test-${{ github.ref_name }} $RELEASE_ARGS ./test.txt
